@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
+
 require('./styles/main.scss');
 
 Vue.use(Buefy)
-
 Vue.config.productionTip = false
 
 

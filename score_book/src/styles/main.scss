@@ -2,10 +2,12 @@
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors
-$primary: #67a4ef;
+
+$primary: #28587b;
+$secondary: #9fb4c7;
+$background: #9fb798;
 $primary-invert: findColorInvert($primary);
-$twitter: #1255a1;
-$twitter-invert: findColorInvert($twitter);
+
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -18,7 +20,7 @@ $colors: (
     "success": ($success, $success-invert),
     "warning": ($warning, $warning-invert),
     "danger": ($danger, $danger-invert),
-    "twitter": ($twitter, $twitter-invert)
+    
 );
 
 // Links
@@ -29,3 +31,33 @@ $link-focus-border: $primary;
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+html {
+    background-color: $background;
+}
+.label {
+    text-align: left;
+    margin-left: 20px;
+    color: $primary;
+
+}
+.AddPlayer {
+    border-radius: 25px;
+ padding: 20px;
+ background-color: #e3f5f9;
+}
+
+.rt {
+    float: right;
+}
+.buttonIcon {
+    margin-left: 5px;
+    
+}
+
+//Media Queries
+@media screen and (min-width: 1408px) {
+
+.container {
+    max-width: 50%;
+}
+}
