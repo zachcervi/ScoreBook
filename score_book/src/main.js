@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import App from './App.vue'
 import Buefy from 'buefy'
-
-require('./styles/main.scss');
+import 'buefy/dist/buefy.css'
+import App from './App.vue'
+require('../src/styles/main.scss');
 
 Vue.use(Buefy)
 Vue.config.productionTip = false

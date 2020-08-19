@@ -5,10 +5,10 @@
         <div class="AddPlayer">
              
             <b-field label="First Name">
-                <b-input></b-input>
+                <b-input v-model="player.firstName"></b-input>
             </b-field>
             <b-field  label="Last Name">
-                <b-input></b-input>
+                <b-input v-model="player.lastName"></b-input>
             </b-field>
 
         </div>
@@ -19,11 +19,13 @@
 <script>
     export default {
         props: {
-            index: Number
+            index: Number,
+            player: Object
         },
         methods: {
             removePlayer(index){
-                console.log(index)
+                let _self = this;
+                _self.$root.$emit('RemovePlayer', index)
                
             }
         }
