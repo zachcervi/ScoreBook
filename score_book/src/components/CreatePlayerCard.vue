@@ -33,12 +33,5 @@
 </script>
 
 <style>
-.remove {
-    margin: 15px;
-}
-.removeButton {
-    border: none;
-    color: red;
-    background-color: #e5f5f9;
-}
+
 </style>

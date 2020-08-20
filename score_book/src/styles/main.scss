@@ -37,13 +37,23 @@ html {
 .label {
     text-align: left;
     margin-left: 20px;
-    color: $primary;
+    color: $white;
 
 }
 .AddPlayer {
     border-radius: 25px;
  padding: 20px;
- background-color: #e3f5f9;
+ background-color: $primary;
+ color: white;
+}
+
+.remove {
+    margin: 15px;
+}
+.removeButton {
+    border: none;
+    color: red;
+    background-color: $primary;
 }
 
 .rt {
@@ -52,6 +62,10 @@ html {
 .buttonIcon {
     margin-left: 5px;
     
+}
+.timer {
+  font-size: 30px;
+   
 }
 
 //Media Queries
