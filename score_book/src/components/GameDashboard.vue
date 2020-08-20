@@ -93,7 +93,7 @@ export default {
             }));
             let winner = _self.getWinner(maxScore)
             _self.$buefy.toast.open({
-                duration: 7000,
+                duration: 5000,
                 message: `${winner.firstName} is the winner!`,
                 type: 'is-success'
             })
