@@ -78,6 +78,8 @@ export default {
         },
         startGame() {
             let _self = this;
+            let result = _self.validatePlayers();
+            console.log(result)
             _self.gameStarted = true;
             _self.game.players = _self.players;
             _self.timer = setInterval(() => {
@@ -105,8 +107,8 @@ export default {
                     return _self.game.players[i]
                 }
             }
-        }, 
-        newGame(){
+        },
+        newGame() {
             let _self = this;
             _self.gameStarted = false;
             _self.game.players.forEach(player => {
@@ -115,7 +117,27 @@ export default {
             _self.game = new Game();
             _self.elapsedTime = 0;
             _self.isGameOver = false;
-            
+
+        },
+        validatePlayers() {
+            let _self = this;
+            var isValid = {
+                valid: null,
+                message: null
+            }
+            _self.players.forEach(player => {
+                if (player.firstName === null || player.firstName === '') {
+                    isValid.valid = false;
+                    isValid.message = 'First Name is required.'
+                    
+
+                } else if (player.lastName === null || player.lastName === '') {
+                    isValid.valid = false;
+                    isValid.message = 'Last Name is required.';
+                    
+                }
+            });
+            return isValid;
         }
     },
     mounted() {
@@ -143,14 +165,13 @@ export default {
 <style>
 .buttonControls {
     display: inline-flex;
- 
+
 }
 
 .buttonControls>button {
     margin-left: 10px;
     margin-right: 10px;
 }
-
 
 .players {
     margin-top: 20px;
