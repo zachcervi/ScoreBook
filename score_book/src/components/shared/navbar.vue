@@ -2,7 +2,7 @@
 <b-navbar>
     <template slot="brand">
         <b-navbar-item tag="router-link" :to="{path: '/'}">
-            ScoreBook <i class="fas fa-dice"></i>
+            ScoreBook <i class="fas fa-dice logo"></i>
         </b-navbar-item>
     </template>
     <template slot="start">
@@ -84,5 +84,8 @@ export default {
 </script>
 
 <style>
-
+.logo {
+    font-size: 30px;
+    margin-left: 5px;
+}
 </style>

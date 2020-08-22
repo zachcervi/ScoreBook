@@ -15,7 +15,7 @@
     </div>
     <div v-if="!gameStarted">
         <div v-for="(player, index) in players" :key="index">
-            <create-player-card :player="player" :index="index"></create-player-card>
+            <create-player-card :users="users" :player="player" :index="index"></create-player-card>
         </div>
     </div>
     <div class="" v-if="gameStarted">
@@ -66,6 +66,18 @@ export default {
             return utc.substr(utc.indexOf(":") - 2, 8);
         }
     },
+    created(){
+        let _self = this;
+        db.collection('users')
+        .get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                let user = doc.data();
+                user.id = doc.id;
+                _self.users.push(user)
+            })
+        })
+    },
     methods: {
         addPlayer() {
             let _self = this;
@@ -97,17 +109,19 @@ export default {
                 return player.score
             }));
             let winner = _self.getWinner(maxScore)
-            _self.game.winner = winner.firstName;
+            _self.game.winner = winner.username;
             _self.game.time = _self.elapsedTime;
 
             _self.$buefy.toast.open({
                 duration: 5000,
-                message: `${winner.firstName} is the winner!`,
+                message: `${winner.username} is the winner!`,
                 type: 'is-success'
             });
-            const gameJson = JSON.stringify(_self.game);
+   
+            let game = {winner: _self.game.winner, elapsedTime: _self.game.time}
+            game = Object.assign({}, game);
             db.collection('games').add({
-            game: gameJson
+            game: game
             }).then(() => {
                 console.log('game saved')
             }).catch(err => {
@@ -176,7 +190,8 @@ export default {
             elapsedTime: 0,
             timer: undefined,
             isGameOver: false,
-            winner: ''
+            winner: '',
+            users: []
         }
     }
 }

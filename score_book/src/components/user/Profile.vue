@@ -1,5 +1,5 @@
 <template>
-<h1>This is the {{user.name}}'s profile page.</h1>
+<h1>This is {{user.name}}'s profile page.</h1>
 </template>
 
 <script>

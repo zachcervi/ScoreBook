@@ -1,10 +1,10 @@
 export class Player {
 	constructor() {
-		this.firstName = null;
-		this.lastName = null;
+		this.name = null;
 		this.score = 0;
+		this.username = null;
 	}
-	firstName;
-	lastName;
+	name;
 	score;
+	username;
 }

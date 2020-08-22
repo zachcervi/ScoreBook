@@ -3,9 +3,9 @@
 
 // Set your colors
 
-$primary: #28587b;
-$secondary: #9fb4c7;
-$background: #9fb798;
+$primary: #335C81;
+$secondary: #274060;
+$background: #6389b1;
 $primary-invert: findColorInvert($primary);
 
 
@@ -52,7 +52,7 @@ html {
 }
 .removeButton {
     border: none;
-    color: red;
+    color: white;
     background-color: $primary;
 }
 
