@@ -1,5 +1,6 @@
 <template>
 <div class="section">
+    
     <div class="container">
         <h1 class="header">Leader Board <i class="fas fa-trophy"></i></h1>
     </div>
