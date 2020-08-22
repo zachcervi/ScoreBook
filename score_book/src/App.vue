@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <game-dashboard></game-dashboard>
+    <navbar />
+  <router-view/>
   </div>
 </template>
 
 <script>
-import GameDashboard from './components/GameDashboard.vue'
+
+import Navbar from './components/shared/navbar'
 
 export default {
   name: 'App',
   components: {
-    GameDashboard
+
+    Navbar
   }
 }
 </script>
@@ -22,6 +25,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

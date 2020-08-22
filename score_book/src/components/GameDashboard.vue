@@ -1,5 +1,6 @@
 <template>
-<div>
+<div class="section">
+    <div class="container">
     <div class="buttonControls">
         <b-button class="inLineButtons" v-if="!gameStarted" rounded type="is-primary" @click="addPlayer">Add Players <span class="buttonIcon"><i class="fas fa-user-plus"></i></span></b-button>
         <div v-if="players.length >= 2 && !gameStarted">
@@ -37,10 +38,12 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
 </template>
 
 <script>
+import db from '@/firebase/init';
 import CreatePlayerCard from './CreatePlayerCard'
 import PlayingPlayer from './Player'
 import {
@@ -94,10 +97,21 @@ export default {
                 return player.score
             }));
             let winner = _self.getWinner(maxScore)
+            _self.game.winner = winner.firstName;
+            _self.game.time = _self.elapsedTime;
+
             _self.$buefy.toast.open({
                 duration: 5000,
                 message: `${winner.firstName} is the winner!`,
                 type: 'is-success'
+            });
+            const gameJson = JSON.stringify(_self.game);
+            db.collection('games').add({
+            game: gameJson
+            }).then(() => {
+                console.log('game saved')
+            }).catch(err => {
+                console.error('game could not be saved. ', err)
             })
         },
         getWinner(score) {
@@ -138,7 +152,12 @@ export default {
                 }
             });
             return isValid;
+        },
+        leaderBoard(){
+            let _self = this;
+            _self.$router.push({name: 'LeaderBoard'})
         }
+        
     },
     mounted() {
         let _self = this;
@@ -156,7 +175,8 @@ export default {
             game: new Game(),
             elapsedTime: 0,
             timer: undefined,
-            isGameOver: false
+            isGameOver: false,
+            winner: ''
         }
     }
 }
