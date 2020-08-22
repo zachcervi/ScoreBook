@@ -6,10 +6,10 @@
         </b-navbar-item>
     </template>
     <template slot="start">
-        <b-navbar-item href="#" tag="router-link" :to="{ path: '/GameDashboard' }">
+        <b-navbar-item v-if="user" href="#" tag="router-link" :to="{ path: '/GameDashboard' }">
             Game Dashboard
         </b-navbar-item>
-        <b-navbar-item href="#" tag="router-link" :to="{path: '/LeaderBoard'}">
+        <b-navbar-item v-if="user" href="#" tag="router-link" :to="{path: '/LeaderBoard'}">
             Leader Board
         </b-navbar-item>
         <!-- <b-navbar-dropdown label="Info">
