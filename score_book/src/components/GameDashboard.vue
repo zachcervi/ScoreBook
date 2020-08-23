@@ -1,43 +1,52 @@
 <template>
 <div class="section">
     <div class="container">
-    <div class="buttonControls">
-        <b-button class="inLineButtons" v-if="!gameStarted" rounded type="is-primary" @click="addPlayer">Add Players <span class="buttonIcon"><i class="fas fa-user-plus"></i></span></b-button>
-        <div v-if="players.length >= 2 && !gameStarted">
-            <b-button @click="startGame" rounded type="is-success">Start Game <span class="buttonIcon"><i class="fas fa-play"></i></span></b-button>
-        </div>
-        <div v-if="gameStarted && !isGameOver">
-            <b-button class="inLineButtons" rounded type="is-danger" @click="endGame">End Game</b-button>
-        </div>
-        <div v-if="isGameOver">
-            <b-button class="inLineButtons" rounded type="is-primary" @click="newGame">New Game</b-button>
-        </div>
-    </div>
-    <div v-if="!gameStarted">
-        <div v-for="(player, index) in players" :key="index">
-            <create-player-card :users="users" :player="player" :index="index"></create-player-card>
-        </div>
-    </div>
-    <div class="" v-if="gameStarted">
+        <div class="buttonControls">
+            <b-button class="inLineButtons" v-if="!gameStarted" rounded type="is-primary" @click="addPlayer">Add Players <span class="buttonIcon"><i class="fas fa-user-plus"></i></span></b-button>
 
-        <section class="section">
+            <div v-if="players.length >= 2 && !gameStarted">
+                <b-button @click="startGame" rounded type="is-success">Start Game <span class="buttonIcon"><i class="fas fa-play"></i></span></b-button>
+            </div>
+            <div v-if="gameStarted && !isGameOver">
+                <h1 class="title">{{game.title}}</h1>
+                <b-button class="inLineButtons" rounded type="is-danger" @click="endGame">End Game</b-button>
+            </div>
+            <div v-if="isGameOver">
+                <b-button class="inLineButtons" rounded type="is-primary" @click="newGame">New Game</b-button>
+            </div>
+        </div>
+        <div v-if="!gameStarted">
             <div class="container">
-                <div class="columns is-centered">
-                    <div class="column is-half">
-                        <figure class="timer">
-                            <p> {{formattedElapsedTime}}</p>
-                        </figure>
+                <b-field class="title" label="Title">
+                    <b-input v-model="game.title"></b-input>
+                </b-field>
+            </div>
+
+            <div v-for="(player, index) in players" :key="index">
+                <create-player-card :users="users" :player="player" :index="index"></create-player-card>
+            </div>
+        </div>
+
+        <div class="" v-if="gameStarted">
+
+            <section class="section">
+                <div class="container">
+                    <div class="columns is-centered">
+                        <div class="column is-half">
+                            <figure class="timer">
+                                <p> {{formattedElapsedTime}}</p>
+                            </figure>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <div class="section columns">
-            <div class="column" v-for="(player, index) in players" :key="index">
-                <playing-player class="column" :player="player"></playing-player>
+            <div class="section columns">
+                <div class="column" v-for="(player, index) in players" :key="index">
+                    <playing-player class="column" :player="player"></playing-player>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 </template>
@@ -66,17 +75,17 @@ export default {
             return utc.substr(utc.indexOf(":") - 2, 8);
         }
     },
-    created(){
+    created() {
         let _self = this;
         db.collection('users')
-        .get()
-        .then(snapshot => {
-            snapshot.forEach(doc => {
-                let user = doc.data();
-                user.id = doc.id;
-                _self.users.push(user)
+            .get()
+            .then(snapshot => {
+                snapshot.forEach(doc => {
+                    let user = doc.data();
+                    user.id = doc.id;
+                    _self.users.push(user)
+                })
             })
-        })
     },
     methods: {
         addPlayer() {
@@ -117,11 +126,14 @@ export default {
                 message: `${winner.username} is the winner!`,
                 type: 'is-success'
             });
-   
-            let game = {winner: _self.game.winner, elapsedTime: _self.game.time}
+
+            let game = {
+                winner: _self.game.winner,
+                elapsedTime: _self.game.time
+            }
             game = Object.assign({}, game);
             db.collection('games').add({
-            game: game
+                game: game
             }).then(() => {
                 console.log('game saved')
             }).catch(err => {
@@ -157,21 +169,22 @@ export default {
                 if (player.firstName === null || player.firstName === '') {
                     isValid.valid = false;
                     isValid.message = 'First Name is required.'
-                    
 
                 } else if (player.lastName === null || player.lastName === '') {
                     isValid.valid = false;
                     isValid.message = 'Last Name is required.';
-                    
+
                 }
             });
             return isValid;
         },
-        leaderBoard(){
+        leaderBoard() {
             let _self = this;
-            _self.$router.push({name: 'LeaderBoard'})
+            _self.$router.push({
+                name: 'LeaderBoard'
+            })
         }
-        
+
     },
     mounted() {
         let _self = this;
@@ -210,5 +223,8 @@ export default {
 
 .players {
     margin-top: 20px;
+}
+.title {
+    margin-top: 10px;
 }
 </style>

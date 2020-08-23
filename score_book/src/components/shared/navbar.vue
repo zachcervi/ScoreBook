@@ -25,12 +25,13 @@
     <template slot="end">
         <b-navbar-item tag="div">
             <div class="buttons">
-                <a v-if="!user"  class="button is-primary" @click="SignUp">
+                <a v-if="!user" class="button is-primary" @click="SignUp">
                     <strong>Sign up</strong>
                 </a>
                 <a v-if="!user" class="button is-light" @click="Login">
                     Log in
                 </a>
+                <a v-if="user" class="userProfile" @click="Profile">{{userProfile.name}}</a>
                 <a v-if="user" @click="Logout">Logout</a>
             </div>
         </b-navbar-item>
@@ -40,6 +41,7 @@
 
 <script>
 import firebase from "firebase";
+import db from "@/firebase/init";
 export default {
     created() {
         let _self = this;
@@ -47,14 +49,24 @@ export default {
 
             if (user) {
                 _self.user = user;
+                let ref = db.collection('users');
+                ref.where('user_id', '==', firebase.auth().currentUser.uid)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            (this.userProfile = doc.data()), (this.userProfile.id = doc.id);
+                        })
+                    })
             } else {
                 _self.user = null;
             }
-        })
+        });
+
     },
     data() {
         return {
-            user: null
+            user: null,
+            userProfile: null
         }
     },
     methods: {
@@ -78,6 +90,10 @@ export default {
                         name: 'Login'
                     })
                 })
+        },
+        Profile() {
+            let _self = this;
+            _self.$router.push({name: 'Profile'})
         }
     }
 }
@@ -87,5 +103,8 @@ export default {
 .logo {
     font-size: 30px;
     margin-left: 5px;
+}
+.userProfile {
+    margin-right: 10px;
 }
 </style>
