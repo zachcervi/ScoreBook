@@ -23,26 +23,18 @@
             </div>
 
             <div v-for="(player, index) in players" :key="index">
-                <create-player-card :users="users" :player="player" :index="index"></create-player-card>
+                <create-player-card :users="users" :players="game.players" :index="index"></create-player-card>
             </div>
         </div>
 
         <div class="" v-if="gameStarted">
 
             <section class="section">
-                <div class="container">
-                    <div class="columns is-centered">
-                        <div class="column is-half">
-                            <figure class="timer">
-                                <p> {{formattedElapsedTime}}</p>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
+               
             </section>
 
             <div class="section columns">
-                <div class="column" v-for="(player, index) in players" :key="index">
+                <div class="column" v-for="(player, index) in game.players" :key="index">
                     <playing-player class="column" :player="player"></playing-player>
                 </div>
             </div>
@@ -53,6 +45,7 @@
 
 <script>
 import db from '@/firebase/init';
+import firebase from 'firebase';
 import CreatePlayerCard from './CreatePlayerCard'
 import PlayingPlayer from './Player'
 import {
@@ -66,14 +59,7 @@ export default {
     beforeDestroy() {
         let _self = this;
         _self.$root.$off('RemovePlayer', _self.removePlayer)
-    },
-    computed: {
-        formattedElapsedTime() {
-            const date = new Date(null);
-            date.setSeconds(this.elapsedTime / 1000);
-            const utc = date.toUTCString();
-            return utc.substr(utc.indexOf(":") - 2, 8);
-        }
+        _self.$root.$off('Players', _self.addedPlayers)
     },
     created() {
         let _self = this;
@@ -100,15 +86,29 @@ export default {
                 _self.players.splice(index, 1);
             }
         },
+        addedPlayers(players) {
+            let _self = this;
+            _self.game.players = players;
+        },
         startGame() {
             let _self = this;
             let result = _self.validatePlayers();
             console.log(result)
             _self.gameStarted = true;
-            _self.game.players = _self.players;
+
             _self.timer = setInterval(() => {
                 _self.elapsedTime += 1000;
             }, 1000)
+
+            _self.game.players.forEach(player => {
+                firebase.database().ref(`games/players/${player.username}`).set({
+                    id: player.id,
+                    name: player.name,
+                    score: player.score,
+                    user_id: player.user_id,
+                    username: player.username
+                })
+            })
         },
         endGame() {
             let _self = this;
@@ -189,6 +189,7 @@ export default {
     mounted() {
         let _self = this;
         _self.$root.$on('RemovePlayer', _self.removePlayer)
+        _self.$root.$on('Players', _self.addedPlayers)
     },
     components: {
         CreatePlayerCard,
@@ -224,6 +225,7 @@ export default {
 .players {
     margin-top: 20px;
 }
+
 .title {
     margin-top: 10px;
 }

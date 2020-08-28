@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router';
 import LeaderBoard from '@/components/LeaderBoard';
-import GameDashboard from '@/components/GameDashboard';
+import CreateGame from '@/components/CreateGame';
 import Home from '@/components/Home'
 import SignUp from '@/components/auth/SignUp'
 import Login from '@/components/auth/Login'
 import Profile from '@/components/user/Profile'
+import CurrentGame from '@/components/CurrentGame'
 Vue.use(Router);
 
 const router = new Router({
@@ -16,10 +17,15 @@ const router = new Router({
             component: Home
         },
         {
-            path: '/GameDashboard',
-            name: 'GameDashboard',
-            component: GameDashboard
+            path: '/CreateGame',
+            name: 'CreateGame',
+            component: CreateGame
 
+        },
+        {
+            path: '/CurrentGame',
+            name: 'CurrentGame',
+            component: CurrentGame
         },
         {
             path: '/LeaderBoard',
