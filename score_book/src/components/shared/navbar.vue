@@ -6,7 +6,7 @@
         </b-navbar-item>
     </template>
     <template slot="start">
-        <b-navbar-item v-if="!gameStarted" href="#" tag="router-link" :to="{ path: '/CreateGame' }">
+        <b-navbar-item v-if="gameStarted" href="#" tag="router-link" :to="{ path: '/CreateGame' }">
             Create Game
         </b-navbar-item>
         <b-navbar-item v-if="user" href="#" tag="router-link" :to="{path: '/LeaderBoard'}">

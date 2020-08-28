@@ -1,23 +1,26 @@
 <template>
 <div class="section">
-    
-    <div class="container">
+
+    <div v-if="snapshot !== null">
         <div class="columns is-centered">
             <div class="column is-half">
+                <h1 class="title">{{snapshot.title.title}}</h1>
                 <figure class="timer">
-                    <p> {{formattedElapsedTime}}</p>
+                 <!-- <p> {{formattedElapsedTime}}</p> -->
                 </figure>
-                <b-button class="inLineButtons" rounded type="is-danger" @click="endGame">End Game</b-button>
+                <b-button rounded type="is-danger" @click="endGame">End Game</b-button>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column" v-for="(player, index) in snapshot.players" :key="index">
+                <playing-player class="column" :player="player"></playing-player>
             </div>
         </div>
     </div>
-    <div class="columns" v-if="snapshot !== null">
-
-        <div class="column" v-for="(player, index) in snapshot.players" :key="index">
-            <playing-player class="column" :player="player"></playing-player>
-        </div>
-
+    <div v-else>
+        <h1>There are no current games in play.</h1>
     </div>
+
 </div>
 </template>
 
@@ -95,7 +98,7 @@ export default {
         updatePoints(player) {
 
             var updates = {};
-            updates[`games/players/${player.id}/score`] = player.score
+            updates[`games/players/${player.username}/score`] = player.score
             const db = firebase.database().ref();
             db.update(updates)
         }

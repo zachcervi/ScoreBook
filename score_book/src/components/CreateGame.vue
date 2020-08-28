@@ -108,7 +108,11 @@ export default {
                     user_id: player.user_id,
                     username: player.username
                 })
+            });
+            firebase.database().ref('games/title').set({
+                title: _self.game.title
             })
+            _self.$router.push({name: 'CurrentGame', params: {game: _self.game}})
         },
         endGame() {
             let _self = this;
