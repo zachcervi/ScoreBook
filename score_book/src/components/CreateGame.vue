@@ -54,7 +54,7 @@ import {
 import {
     Game
 } from '../models/game'
-
+import {generateGuid} from '@/utils/utils'
 export default {
     beforeDestroy() {
         let _self = this;
@@ -92,16 +92,10 @@ export default {
         },
         startGame() {
             let _self = this;
-            let result = _self.validatePlayers();
-            console.log(result)
-            _self.gameStarted = true;
-
-            _self.timer = setInterval(() => {
-                _self.elapsedTime += 1000;
-            }, 1000)
-
+        
+            _self.game.id = generateGuid();
             _self.game.players.forEach(player => {
-                firebase.database().ref(`games/players/${player.username}`).set({
+                firebase.database().ref(`games/${_self.game.id}/players/${player.username}`).set({
                     id: player.id,
                     name: player.name,
                     score: player.score,
@@ -109,10 +103,11 @@ export default {
                     username: player.username
                 })
             });
-            firebase.database().ref('games/title').set({
-                title: _self.game.title
+            firebase.database().ref(`games/${_self.game.id}/title`).set({
+                title: _self.game.title,
+                
             })
-            _self.$router.push({name: 'CurrentGame', params: {game: _self.game}})
+            _self.$router.push({name: 'CurrentGame', query:{id: _self.game.id}, params: {game: _self.game}})
         },
         endGame() {
             let _self = this;

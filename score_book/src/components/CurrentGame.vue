@@ -4,15 +4,15 @@
     <div v-if="snapshot !== null">
         <div class="columns is-centered">
             <div class="column is-half">
-                <h1 class="title">{{snapshot.title.title}}</h1>
+                <h1 class="title">{{getTitle.title}}</h1>
                 <figure class="timer">
-                 <!-- <p> {{formattedElapsedTime}}</p> -->
+                    <!-- <p> {{formattedElapsedTime}}</p> -->
                 </figure>
                 <b-button rounded type="is-danger" @click="endGame">End Game</b-button>
             </div>
         </div>
         <div class="columns">
-            <div class="column" v-for="(player, index) in snapshot.players" :key="index">
+            <div class="column" v-for="(player, index) in snapshot[gameId].players" :key="index">
                 <playing-player class="column" :player="player"></playing-player>
             </div>
         </div>
@@ -28,6 +28,7 @@
 import firebase from 'firebase';
 import db from '@/firebase/init';
 import PlayingPlayer from './Player'
+
 export default {
     beforeDestroy() {
         let _self = this;
@@ -51,7 +52,17 @@ export default {
             date.setSeconds(this.elapsedTime / 1000);
             const utc = date.toUTCString();
             return utc.substr(utc.indexOf(":") - 2, 8);
+        },
+        getTitle() {
+            let _self = this;
+            _self.gameId = _self.$route.query.id
+            return _self.snapshot[_self.gameId].title
+        },
+        getGameId() {
+            let _self = this;
+            return _self.gameId = _self.$route.query.id
         }
+
     },
 
     components: {
@@ -62,29 +73,17 @@ export default {
             snapshot: null,
             elapsedTime: 0,
             timer: undefined,
+            gameId: null
         }
     },
     methods: {
         endGame() {
             let _self = this;
-            clearInterval(_self.timer);
-            _self.isGameOver = true
-            let maxScore = Math.max.apply(Math, _self.game.players.map((player) => {
-                return player.score
-            }));
-            let winner = _self.getWinner(maxScore)
-            _self.game.winner = winner.username;
-            _self.game.time = _self.elapsedTime;
-
-            _self.$buefy.toast.open({
-                duration: 5000,
-                message: `${winner.username} is the winner!`,
-                type: 'is-success'
-            });
-
+        
             let game = {
-                winner: _self.game.winner,
-                elapsedTime: _self.game.time
+                date: Date.now(),
+                players: _self.snapshot[_self.gameId].players,
+                title: _self.snapshot[_self.gameId].title
             }
             game = Object.assign({}, game);
             db.collection('games').add({
@@ -94,11 +93,12 @@ export default {
             }).catch(err => {
                 console.error('game could not be saved. ', err)
             })
+            _self.$router.push({name: 'CreateGame'})
         },
         updatePoints(player) {
-
+            let _self = this;
             var updates = {};
-            updates[`games/players/${player.username}/score`] = player.score
+            updates[`games/${_self.gameId}/players/${player.username}/score`] = player.score
             const db = firebase.database().ref();
             db.update(updates)
         }

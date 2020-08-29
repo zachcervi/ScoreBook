@@ -9,6 +9,8 @@
         <b-navbar-item v-if="gameStarted" href="#" tag="router-link" :to="{ path: '/CreateGame' }">
             Create Game
         </b-navbar-item>
+         <b-navbar-item v-if="user" tag="router-link" :to="{path: '/GameHistory'}">Game History</b-navbar-item>
+       
         <b-navbar-item v-if="user" href="#" tag="router-link" :to="{path: '/LeaderBoard'}">
             Leader Board
         </b-navbar-item>

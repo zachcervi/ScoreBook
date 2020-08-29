@@ -7,6 +7,7 @@ import SignUp from '@/components/auth/SignUp'
 import Login from '@/components/auth/Login'
 import Profile from '@/components/user/Profile'
 import CurrentGame from '@/components/CurrentGame'
+import GameHistory from '@/components/GameHistory'
 Vue.use(Router);
 
 const router = new Router({
@@ -26,6 +27,11 @@ const router = new Router({
             path: '/CurrentGame',
             name: 'CurrentGame',
             component: CurrentGame
+        },
+        {
+            path: '/GameHistory',
+            name: 'GameHistory',
+            component: GameHistory
         },
         {
             path: '/LeaderBoard',
