@@ -21,12 +21,11 @@ export default {
         .then(snapshot => {
             snapshot.forEach(doc => {
                 let game = doc.data();  
-                let date = _self.formatDate(game)
-                game.date = date
                 _self.games.push(game)
             })
         })
     },
+   
     data() {
         return {
             games: [],
