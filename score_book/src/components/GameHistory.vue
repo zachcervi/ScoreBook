@@ -20,9 +20,10 @@ export default {
         .get()
         .then(snapshot => {
             snapshot.forEach(doc => {
-                let game = doc.data();  
-                let date = _self.formatDate(game)
-                game.date = date
+                let data = doc.data();  
+                let game = {};
+                game = data.game;
+               game.date =  _self.formatDate(game.date)
                 _self.games.push(game)
             })
         })
@@ -36,17 +37,20 @@ export default {
                 label: 'Date',
                 centerd: true
                 }, {
-                    field: 'game.players',
-                    label: 'Players',
+                    field: 'game.title',
+                    label: 'Title',
                     centerd: true
                 }
             ]
         }
     },
     methods: {
-        formatDate(game){
-            let gameDate = game.date;
-            console.log(gameDate)
+        formatDate(date){
+           let d = new Date(date);
+           let year = d.getFullYear();
+           let month = d.getMonth()+ 1;
+           let day = d.getDate();
+           return `${month}/${day}/${year}`
         }
     }
    

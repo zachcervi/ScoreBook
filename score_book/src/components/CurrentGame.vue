@@ -81,7 +81,7 @@ export default {
             let _self = this;
         
             let game = {
-                date: Date.now(),
+                date: new Date().toDateString(),
                 players: _self.snapshot[_self.gameId].players,
                 title: _self.snapshot[_self.gameId].title
             }
